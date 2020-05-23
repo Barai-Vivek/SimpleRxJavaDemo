@@ -7,7 +7,7 @@ This activity represents Observer and Observable simple example where a list of 
 Then they are displayed in onNext() method.
 </LI>
 
-There are <b>four</b>operators who's job is to create Observables.
+There are <b>four</b> operators who's job is to create Observables.
 <OL>create()</OL>
 <OL>just()</OL>
 <OL>range()</OL>
