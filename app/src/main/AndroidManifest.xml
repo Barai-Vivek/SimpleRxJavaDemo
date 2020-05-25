@@ -16,28 +16,56 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".activity.ObserverObservableWithCreateOperatorsActivity">
+        <activity android:name=".activity.ObserverObservableWithCreateOperatorActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".activity.ObserverObservableWithJustOperatorsActivity">
+        <activity android:name=".activity.ObserverObservableWithJustOperatorActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".activity.ObserverObservableWithRangeOperatorsActivity">
+        <activity android:name=".activity.ObserverObservableWithRangeOperatorActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".activity.ObserverObservableWithRepeatOperatorsActivity">
+        <activity android:name=".activity.ObserverObservableWithRepeatOperatorActivity">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity android:name=".activity.ObserverObservableWithIntervalOperatorActivity">
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity android:name=".activity.ObserverObservableWithTimerOperatorActivity">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity android:name=".activity.ObserverObservableWithFromArrayOperatorActivity">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity android:name=".activity.ObserverObservableWithFromCallableOperatorActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

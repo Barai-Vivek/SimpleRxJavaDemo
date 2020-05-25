@@ -20,9 +20,9 @@ import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class ObserverObservableWithRepeatOperatorsActivity extends AppCompatActivity {
+public class ObserverObservableWithRepeatOperatorActivity extends AppCompatActivity {
 
-    private String TAG = "ObserverObservableWithRepeatOperatorsActivity";
+    private String TAG = this.getClass().getName();
     private Observable<Integer> taskWithPriorityObservable;
 
     @Override

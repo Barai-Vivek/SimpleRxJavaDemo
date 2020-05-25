@@ -14,15 +14,17 @@ import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class ObserverObservableWithRangeOperatorsActivity extends AppCompatActivity {
+public class ObserverObservableWithCreateOperatorActivity extends AppCompatActivity {
 
-    private String TAG = "ObserverObservableWithRangeOperatorsActivity";
+    private String TAG = this.getClass().getName();
     private Observable<TaskWithPriority> taskWithPriorityObservable;
 
     @Override
@@ -30,22 +32,21 @@ public class ObserverObservableWithRangeOperatorsActivity extends AppCompatActiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_observer_observable);
 
-        List<TaskWithPriority> taskWithPriorities = generateTaskList();
 
         taskWithPriorityObservable = Observable
-                .range(0, taskWithPriorities.size())
-                .map(new Function<Integer, TaskWithPriority>() {
+                .create(new ObservableOnSubscribe<TaskWithPriority>() {
                     @Override
-                    public TaskWithPriority apply(Integer integer) throws Throwable {
-                        return taskWithPriorities.get(integer);
+                    public void subscribe(@NonNull ObservableEmitter<TaskWithPriority> emitter) throws Throwable {
+                        for (TaskWithPriority taskWithPriority : generateTaskList()) {
+                            if (!emitter.isDisposed()) {
+                                emitter.onNext(taskWithPriority);
+                            }
+                        }
+                        if (!emitter.isDisposed()) {
+                            emitter.onComplete();
+                        }
                     }
-                }).takeWhile(new Predicate<TaskWithPriority>() {
-                    @Override
-                    public boolean test(TaskWithPriority taskWithPriority) throws Throwable {
-                        return taskWithPriorities.size() > 0;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
+                }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
         taskWithPriorityObservable.subscribe(new Observer<TaskWithPriority>() {

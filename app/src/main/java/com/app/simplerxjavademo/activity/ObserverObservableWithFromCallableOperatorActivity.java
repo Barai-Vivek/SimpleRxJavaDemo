@@ -8,48 +8,51 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.app.simplerxjavademo.R;
 import com.app.simplerxjavademo.models.TaskWithPriority;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.Callable;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableEmitter;
-import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class ObserverObservableWithJustOperatorsActivity extends AppCompatActivity {
+public class ObserverObservableWithFromCallableOperatorActivity extends AppCompatActivity {
 
-    private String TAG = "ObserverObservableWithJustOperatorsActivity";
-    private Observable<TaskWithPriority> taskWithPriorityObservable;
+    private String TAG = this.getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_observer_observable);
 
-        TaskWithPriority taskWithPriority = new TaskWithPriority("Wake up in morning", false, 0);
-        //just operator can accept maximum array length of ten
-        taskWithPriorityObservable = Observable
-                .just(taskWithPriority).subscribeOn(Schedulers.io())
+        // create Observable (method will not execute yet)
+        Observable<TaskWithPriority> callable = Observable
+                .fromCallable(new Callable<TaskWithPriority>() {
+                    @Override
+                    public TaskWithPriority call() throws Exception {
+                        Log.d(TAG, "call: " + Thread.currentThread().getName());
+                        return (new TaskWithPriority("Wake up in morning", false, 0));//you can also retrive from database query it can also be List[T]
+                    }
+                })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        taskWithPriorityObservable.subscribe(new Observer<TaskWithPriority>() {
+        // method will be executed since now something has subscribed
+        callable.subscribe(new Observer<TaskWithPriority>() {
             @Override
-            public void onSubscribe(@NonNull Disposable d) {
+            public void onSubscribe(Disposable d) {
                 Log.d(TAG, "onSubscribe: Called");
             }
 
             @Override
-            public void onNext(@NonNull TaskWithPriority taskWithPriority) {
+            public void onNext(TaskWithPriority task) {
                 Log.d(TAG, "onNext: " + Thread.currentThread().getName());
-                Log.d(TAG, "onNext: " + taskWithPriority.getDescription());
+                Log.d(TAG, "onNext: : " + task.getDescription());
             }
 
             @Override
-            public void onError(@NonNull Throwable e) {
+            public void onError(Throwable e) {
                 Log.d(TAG, "onError: " + e.getMessage());
             }
 
@@ -59,5 +62,4 @@ public class ObserverObservableWithJustOperatorsActivity extends AppCompatActivi
             }
         });
     }
-
 }

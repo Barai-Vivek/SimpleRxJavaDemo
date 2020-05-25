@@ -1,72 +1,58 @@
 package com.app.simplerxjavademo.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.simplerxjavademo.R;
 import com.app.simplerxjavademo.models.TaskWithPriority;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class SimpleObserverObservableActivity extends AppCompatActivity {
+public class ObserverObservableWithIntervalOperatorActivity extends AppCompatActivity {
 
     private String TAG = this.getClass().getName();
-    private Observable<TaskWithPriority> taskWithPriorityObservable;
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private Observable<Long> intervaLongObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_observer_observable);
 
-        taskWithPriorityObservable = Observable.fromIterable(generateTaskList())
+        //emit an observable on every interval
+        intervaLongObservable = Observable
+                .interval(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
-                .filter(new Predicate<TaskWithPriority>() {
+                .takeWhile(new Predicate<Long>() {
                     @Override
-                    public boolean test(TaskWithPriority taskWithPriority) throws Throwable {
-                        Log.d(TAG, "test: " + Thread.currentThread().getName());
-                        //if you write this code here it will in background thread observ thread name
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        return taskWithPriority.isActive();
+                    public boolean test(Long aLong) throws Throwable {
+                        Log.d(TAG, "test: "+ aLong +" , thread: " + Thread.currentThread().getName());
+                        return aLong <= 5;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
 
-        taskWithPriorityObservable.subscribe(new Observer<TaskWithPriority>() {
+        intervaLongObservable.subscribe(new Observer<Long>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 Log.d(TAG, "onSubscribe: Called");
-                //disposable will be used to release the observer once activity is destroyed
-                disposable.add(d);
             }
 
             @Override
-            public void onNext(@NonNull TaskWithPriority taskWithPriority) {
+            public void onNext(@NonNull Long aLong) {
                 Log.d(TAG, "onNext: " + Thread.currentThread().getName());
-                Log.d(TAG, "onNext: " + taskWithPriority.getDescription());
-
-                //if you write this code this will freez on main thread obeserve thread name
-                /*try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
+                Log.d(TAG, "onNext: interval: " + aLong);
             }
 
             @Override
@@ -81,7 +67,6 @@ public class SimpleObserverObservableActivity extends AppCompatActivity {
         });
     }
 
-
     public List<TaskWithPriority> generateTaskList() {
         List<TaskWithPriority> taskWithPriorities = new ArrayList<>();
         taskWithPriorities.add(new TaskWithPriority("Wake up in morning", false, 0));
@@ -91,12 +76,5 @@ public class SimpleObserverObservableActivity extends AppCompatActivity {
         taskWithPriorities.add(new TaskWithPriority("Rest after work", true, 3));
 
         return taskWithPriorities;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //this will clear ther observer so if activity is destroyed you can release them
-        disposable.clear();
     }
 }
