@@ -7,11 +7,16 @@ This activity represents Observer and Observable simple example where a list of 
 Then they are displayed in onNext() method.
 </LI>
 
-There are <b>four</b> operators who's job is to create Observables.
+There are create operators who's job is to create Observables.
 <OL>create()</OL>
 <OL>just()</OL>
 <OL>range()</OL>
 <OL>repeat()</OL>
+<OL>interval()</OL>
+<OL>timer()</OL>
+<OL>fromArray()</OL>
+<OL>fromIterable()</OL>
+<OL>fromCallable()</OL>
 
 <b><LI>ObserverObservableWithCreateOperatorsActivity</b><br>
 This activity represents an example of create() operator.
@@ -31,4 +36,31 @@ This activity represents an example of range() operator.
 <b><LI>ObserverObservableWithRepeatOperatorsActivity</b><br>
 This activity represents an example of repeat() operator.
 Where range is repeated multiple times.
+</LI>
+
+<b><LI>ObserverObservableWithIntervalOperatorActivity</b><br>
+This activity represents an example of interval() operator.
+Where it returns infinite sequence of ascending integers, with a constant interval of time of your choosing between emissions.
+ Therefore takeWhile() is used to stop it.
+</LI>
+
+<b><LI>ObserverObservableWithTimerOperatorActivity</b><br>
+This activity represents an example of timer() operator.
+It is fired at specific time for single time(only once).
+</LI>
+
+<b><LI>ObserverObservableWithFromArrayOperatorActivity</b><br>
+This activity represents an example of fromArray() operator.
+It accepst accepts T[].
+</LI>
+
+<b><LI>SimpleObserverObservableActivity(to see fromIterable example)</b><br>
+This activity represents an example of fromArray() operator.
+It accepst accepts List\<T\>, ArrayList\<T\>, Set\<T\>, etc...
+</LI>
+
+<b><LI>ObserverObservableWithFromCallableOperatorActivity</b><br>
+This activity represents an example of fromCallable() operator.
+This operator can be helpful in retriving data from database though i have used new object and returned it.
+ It can accept single object Callable\<T\> as well as List Callable\<List\<T\>\>.
 </LI>
